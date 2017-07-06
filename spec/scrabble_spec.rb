@@ -25,6 +25,12 @@ describe 'Scrabble class' do
         expect(Scrabble.new.score('abc')).to eq(7)
       end
 
+      it 'should raise an error if passed a string containing non-alpha characters' do
+        expect{ Scrabble.new.score('!@#$%^&*()[]0123456789/*-+;""<>,./?\'\'') }.to(
+          raise_error(ArgumentError, "Illegal characters in word")
+        )
+      end
+
     end
   end
 end

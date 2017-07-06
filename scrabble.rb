@@ -17,6 +17,10 @@ class Scrabble
       return 0
     end
 
+    if(/[^a-zA-Z]/.match(word))
+      raise ArgumentError, "Illegal characters in word"
+    end
+
     score = 0
 
     word.chars.each do |char|
