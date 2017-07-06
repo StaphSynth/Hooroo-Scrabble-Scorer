@@ -41,9 +41,36 @@ describe 'Scrabble class' do
       end
 
       it 'should raise an error if bonus.legth does not equal word.length' do
-        expect{ Scrabble.new.score('abc', [nil,:dw,nil,nil]) }.to(
+        expect{ Scrabble.new.score('abc', [:n,:dw,:n,:n]) }.to(
           raise_error(ArgumentError, 'Bonus array.length must equal word.length')
         )
+      end
+
+      it 'should apply the letter bonuses correctly' do
+        #without letter bonus
+        expect(Scrabble.new.score('oxidizes', [:n,:n,:n,:n,:n,:n,:n,:n])).to eq(25)
+        #with single letter bonus
+        expect(Scrabble.new.score('oxidizes', [:n,:n,:n,:n,:n,:tl,:n,:n])).to eq(45)
+        #with multiple letter bonus
+        expect(Scrabble.new.score('oxidizes', [:n,:dl,:n,:n,:n,:tl,:n,:n])).to eq(53)
+      end
+
+      it 'should apply the word bonuses correctly' do
+        #without word bonus
+        expect(Scrabble.new.score('oxidizes', [:n,:n,:n,:n,:n,:n,:n,:n])).to eq(25)
+        #single word bonus
+        expect(Scrabble.new.score('oxidizes', [:n,:n,:dw,:n,:n,:n,:n,:n])).to eq(50)
+        #multiple word bonus
+        expect(Scrabble.new.score('oxidizes', [:n,:n,:dw,:n,:n,:tw,:n,:n])).to eq(150)
+      end
+
+      it 'should apply both letter and word bonuses correctly' do
+        #without bonus
+        expect(Scrabble.new.score('oxidizes', [:n,:n,:n,:n,:n,:n,:n,:n])).to eq(25)
+        #with letter bonus
+        expect(Scrabble.new.score('oxidizes', [:n,:n,:n,:n,:n,:tl,:n,:n])).to eq(45)
+        #with word and letter bonus
+        expect(Scrabble.new.score('oxidizes', [:n,:dw,:n,:n,:n,:tl,:n,:n])).to eq(90)
       end
     end
   end

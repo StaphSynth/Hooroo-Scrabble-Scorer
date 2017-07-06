@@ -20,8 +20,10 @@ class Scrabble
     @total_score = 0
   end
 
-  #returns the word score. Takes arg word: string containing only alpha characters.
-  #arg bonus: array of length == word, descibing any special tiles the letters occupy.
+  attr_reader :total_score
+
+  #returns the word score and adds to the total. Takes arg word: string containing only alpha characters.
+  #arg bonus: optional array of length == word, descibing any special tiles the letters occupy.
   #Symobols used: :dw = double word score, :tw = tripple word score
   #               :dl = double letter score, :tl = tripple letter score
   #               :n = no bonus on that tile
@@ -54,13 +56,26 @@ class Scrabble
   private
     def compute_score(word, bonus)
       score = 0
+      word_multiplier = 1
+      letter_multiplier = 1
 
+      #zip the two arrays so that bonuses are associated with their letters
+      #then loop over the array and apply the bonus logic and maths
       word = word.chars.zip(bonus)
       word.each do |char, bonus|
-        score += @@letter_scores[char.upcase]
+        letter_multiplier = 1
+
+        case bonus
+        when nil, :n
+        when :dl, :tl
+          letter_multiplier = @@bonus_multipliers[bonus]
+        when :dw, :tw
+          word_multiplier *= @@bonus_multipliers[bonus]
+        end
+
+        score += @@letter_scores[char.upcase] * letter_multiplier
       end
-      return score
+
+      return score * word_multiplier
     end
 end
-
-puts Scrabble.new.score("oxidizes")
