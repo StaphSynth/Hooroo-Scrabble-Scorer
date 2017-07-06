@@ -16,5 +16,13 @@ class Scrabble
     if(!word || word.empty?)
       return 0
     end
+
+    score = 0
+
+    word.chars.each do |char|
+      score += @@letter_scores[char.upcase]
+    end
+
+    return score
   end
 end
