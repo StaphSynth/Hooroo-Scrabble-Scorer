@@ -12,13 +12,28 @@ class Scrabble
     }
   end
 
+  #returns the word score. Takes arg word: string containing only alpha characters.
+  #arg bonus: array of length == word, descibing any special tiles the letters occupy.
+  #Symobols used: :dw = double word score, :tw = tripple word score
+  #               :dl = double letter score, :tl = tripple letter score
+  #               nil = no bonus on that tile
+  #
+  #EG: [nil, :dw, 'nil', nil], [nil, :tl, nil, :dw, nil, nil, nil], etc
   def score(word, bonus = nil)
     if(!word || word.empty?)
       return 0
     end
 
     if(/[^a-zA-Z]/.match(word))
-      raise ArgumentError, "Illegal characters in word"
+      raise ArgumentError, 'Illegal characters in word'
+    end
+
+    if(bonus)
+      if(!bonus.kind_of?(Array))
+        raise ArgumentError, 'Bonus parameter must be an array'
+      elsif(bonus.length != word.length)
+        raise ArgumentError, 'Bonus array.length must equal word.length'
+      end
     end
 
     score = 0
