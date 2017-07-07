@@ -7,22 +7,21 @@ describe 'Scrabble class' do
 
   describe 'Score method' do
 
-    it 'should return zero if word argument is empty' do
-      expect(Scrabble.new.score('')).to eq(0)
-    end
+    context 'if passed an empty word parameter' do
 
-    it 'should return zero if word argument is nil' do
-      expect(Scrabble.new.score(nil)).to eq(0)
+      it 'should return zero if word argument is empty' do
+        expect(Scrabble.new.score('')).to eq(0)
+      end
+
+      it 'should return zero if word argument is nil' do
+        expect(Scrabble.new.score(nil)).to eq(0)
+      end
     end
 
     context 'if passed only a word string and no bonuses data' do
 
       it 'should not return zero if a string of letters is passed' do
         expect(Scrabble.new.score('abc')).not_to eq(0)
-      end
-
-      it 'should return the sum of the letter score values' do
-        expect(Scrabble.new.score('abc')).to eq(7)
       end
 
       it 'should raise an error if passed a string containing non-alpha characters' do
@@ -32,7 +31,7 @@ describe 'Scrabble class' do
       end
     end
 
-    context 'if passed a legal word and bonus data' do
+    context 'if passed a legal word, but illegal bonus data' do
 
       it 'should raise an error if the bonus data is not an array' do
         expect{ Scrabble.new.score('abc', :dw) }.to(
@@ -40,37 +39,54 @@ describe 'Scrabble class' do
         )
       end
 
-      it 'should raise an error if bonus.legth does not equal word.length' do
+      it 'should raise an error if bonus.length does not equal word.length' do
         expect{ Scrabble.new.score('abc', [:n,:dw,:n,:n]) }.to(
           raise_error(ArgumentError, 'Bonus array.length must equal word.length')
         )
       end
+    end
+  end
+
+  describe 'compute_score method' do
+
+    context 'when passed a word and a bonus array' do
+
+      #set empty bonus array
+      before(:each) do
+        @bonus = [:n,:n,:n,:n,:n,:n,:n,:n]
+      end
 
       it 'should apply the letter bonuses correctly' do
         #without letter bonus
-        expect(Scrabble.new.score('oxidizes', [:n,:n,:n,:n,:n,:n,:n,:n])).to eq(25)
+        expect(Scrabble.new.score('oxidizes', @bonus)).to eq(25)
         #with single letter bonus
-        expect(Scrabble.new.score('oxidizes', [:n,:n,:n,:n,:n,:tl,:n,:n])).to eq(45)
+        @bonus[5] = :tl
+        expect(Scrabble.new.score('oxidizes', @bonus)).to eq(45)
         #with multiple letter bonus
-        expect(Scrabble.new.score('oxidizes', [:n,:dl,:n,:n,:n,:tl,:n,:n])).to eq(53)
+        @bonus[1] = :dl
+        expect(Scrabble.new.score('oxidizes', @bonus)).to eq(53)
       end
 
       it 'should apply the word bonuses correctly' do
         #without word bonus
-        expect(Scrabble.new.score('oxidizes', [:n,:n,:n,:n,:n,:n,:n,:n])).to eq(25)
+        expect(Scrabble.new.score('oxidizes', @bonus)).to eq(25)
         #single word bonus
-        expect(Scrabble.new.score('oxidizes', [:n,:n,:dw,:n,:n,:n,:n,:n])).to eq(50)
+        @bonus[2] = :dw
+        expect(Scrabble.new.score('oxidizes', @bonus)).to eq(50)
         #multiple word bonus
-        expect(Scrabble.new.score('oxidizes', [:n,:n,:dw,:n,:n,:tw,:n,:n])).to eq(150)
+        @bonus[5] = :tw
+        expect(Scrabble.new.score('oxidizes', @bonus)).to eq(150)
       end
 
       it 'should apply both letter and word bonuses correctly' do
         #without bonus
-        expect(Scrabble.new.score('oxidizes', [:n,:n,:n,:n,:n,:n,:n,:n])).to eq(25)
+        expect(Scrabble.new.score('oxidizes', @bonus)).to eq(25)
         #with letter bonus
-        expect(Scrabble.new.score('oxidizes', [:n,:n,:n,:n,:n,:tl,:n,:n])).to eq(45)
+        @bonus[5] = :tl
+        expect(Scrabble.new.score('oxidizes', @bonus)).to eq(45)
         #with word and letter bonus
-        expect(Scrabble.new.score('oxidizes', [:n,:dw,:n,:n,:n,:tl,:n,:n])).to eq(90)
+        @bonus[1] = :dw
+        expect(Scrabble.new.score('oxidizes', @bonus)).to eq(90)
       end
     end
   end
