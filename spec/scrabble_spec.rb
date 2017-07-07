@@ -5,7 +5,7 @@ require_relative '../scrabble'
 
 describe 'Scrabble class' do
 
-  describe 'Score method' do
+  describe '#score method' do
 
     context 'if passed an empty word parameter' do
 
@@ -45,9 +45,23 @@ describe 'Scrabble class' do
         )
       end
     end
+
+    context 'when executed multiple times' do
+
+      it 'correctly tracks the total_score' do
+        game = Scrabble.new
+        expect(game.total_score).to eq(0)
+
+        game.score('cabbage')
+        expect(game.total_score).to eq(14)
+        
+        game.score('oxidizes')
+        expect(game.total_score).to eq(39)
+      end
+    end
   end
 
-  describe 'compute_score method' do
+  describe 'output of compute_score private method called by #score' do
 
     context 'when passed a word and a bonus array' do
 
