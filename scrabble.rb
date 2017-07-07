@@ -45,28 +45,33 @@ class Scrabble
         raise ArgumentError, 'Bonus array.length must equal word.length'
       end
     else
-      bonus = Array.new(word.length)
+      #if no bonus array exists, create an 'empty' one
+      bonus = Array.new(word.length, :n)
     end
 
-    score = compute_score(word, bonus)
+    #zip the word chars with the bonus array so that letters are associated with their bonuses
+    word_layout = word.chars.zip(bonus)
+    score = compute_score(word_layout)
     @total_score += score
     return score
   end
 
   private
-    def compute_score(word, bonus)
+
+    #returns the word score including the effects of any bonus squares
+    #accepts a nested array of arrays containing the letter and bonus info
+    #Eg: word_layout = [['f', :n], ['u', :dw], ['n', :n]]
+    def compute_score(word_layout)
       score = 0
       word_multiplier = 1
       letter_multiplier = 1
 
-      #zip the two arrays so that bonuses are associated with their letters
-      #then loop over the array and apply the bonus logic and maths
-      word = word.chars.zip(bonus)
-      word.each do |char, bonus|
+      #loop over the layout array and apply the bonus logic and maths
+      word_layout.each do |char, bonus|
         letter_multiplier = 1
 
         case bonus
-        when nil, :n
+        when :n
         when :dl, :tl
           letter_multiplier = @@bonus_multipliers[bonus]
         when :dw, :tw
