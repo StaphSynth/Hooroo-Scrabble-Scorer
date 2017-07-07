@@ -71,7 +71,7 @@ class Scrabble
         letter_multiplier = 1
 
         case bonus
-        when :n
+        when nil, :n
         when :dl, :tl
           letter_multiplier = @@bonus_multipliers[bonus]
         when :dw, :tw
