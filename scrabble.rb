@@ -24,8 +24,8 @@ class Scrabble
 
   #returns the word score and adds to the total. Takes arg word: string containing only alpha characters.
   #arg bonus: optional array of length == word, descibing any special tiles the letters occupy.
-  #Symobols used: :dw = double word score, :tw = tripple word score
-  #               :dl = double letter score, :tl = tripple letter score
+  #Symobols used: :dw = double word score, :tw = triple word score
+  #               :dl = double letter score, :tl = triple letter score
   #               :n = no bonus on that tile
   #
   #EG: [:n, :dw, :n, :n], [:n, :tl, :n, :dw, :n, :n, :n], etc

@@ -12,7 +12,7 @@ game.total_score
 => 8
 ```
 
-Optionally, you may also pass a bonuses array and it will apply the bonuses to the word score. The array must be as long as the word, with each element consisting of a symbol that represents the bonus status of the corresponding letter. For example: word = "cat", bonus array = `[:dw,:n,:n]`. The word is "cat" and a double word score is associated with the letter "c". No bonuses are applied to the other letters. The symbols used in the array are: `:n` = nothing, `:dl` = double letter, `:tl` = tripple letter, `:dw` = double word, and `:tw` = tripple word score.
+Optionally, you may also pass a bonuses array and it will apply the bonuses to the word score. The array must be as long as the word, with each element consisting of a symbol that represents the bonus status of the corresponding letter. For example: word = "cat", bonus array = `[:dw,:n,:n]`. The word is "cat" and a double word score is associated with the letter "c". No bonuses are applied to the other letters. The symbols used in the array are: `:n` = nothing, `:dl` = double letter, `:tl` = triple letter, `:dw` = double word, and `:tw` = triple word score.
 ```ruby
 bonus = [:n,:n,:dw,:n,:n,:n,:n]
 game.score("cabbage", bonus)
